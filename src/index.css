@@ -1,0 +1,26 @@
+.icon-container {
+  border-radius: 50%;
+  padding: 8px;
+  width: 40px;
+  height: 40px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.icon-container:hover {
+  background-color: rgba(136, 136, 136, 0.4);
+}
+
+::-webkit-scrollbar {
+  border-radius: 0;
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(136, 136, 136, 0.4);
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 0;
+  background-color: rgba(0, 0, 0, 0);
+}
