@@ -9,14 +9,20 @@ const protectRoute = async (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
-    const user = await User.findById(decoded.userId).select('-password')
+    const userIdFromToken = decoded.userId // Access the 'id' property from the decoded token
+
+    const user = await User.findById(userIdFromToken).select('-password')
+
+    if (!user) {
+      return res.status(401).json({ message: 'Unauthorized' })
+    }
 
     req.user = user
 
     next()
   } catch (err) {
     res.status(500).json({ message: err.message })
-    console.log('Error in signupUser: ', err.message)
+    console.log('Error in protectRoute: ', err.message)
   }
 }
 
