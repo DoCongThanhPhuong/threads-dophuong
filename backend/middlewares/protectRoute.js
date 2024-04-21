@@ -9,7 +9,7 @@ const protectRoute = async (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
-    const userIdFromToken = decoded.userId // Access the 'id' property from the decoded token
+    const userIdFromToken = decoded.userId // Access the 'userId' property from the decoded token
 
     const user = await User.findById(userIdFromToken).select('-password')
 
