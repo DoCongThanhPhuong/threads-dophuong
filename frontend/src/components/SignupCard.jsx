@@ -21,7 +21,7 @@ import authScreenAtom from '~/atoms/authAtom'
 import useShowToast from '~/hooks/useShowToast'
 import userAtom from '~/atoms/userAtom'
 
-export default function SignupCard() {
+function SignupCard() {
   const [showPassword, setShowPassword] = useState(false)
   const setAuthScreen = useSetRecoilState(authScreenAtom)
   const [inputs, setInputs] = useState({
@@ -158,3 +158,5 @@ export default function SignupCard() {
     </Flex>
   )
 }
+
+export default SignupCard
