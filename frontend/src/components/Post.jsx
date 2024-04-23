@@ -4,10 +4,14 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Avatar, Box, Flex, Image, Text } from '@chakra-ui/react'
 import Actions from './Actions'
 import useShowToast from '~/hooks/useShowToast'
+import { useRecoilValue } from 'recoil'
+import userAtom from '~/atoms/userAtom'
+import { DeleteIcon } from '@chakra-ui/icons'
 
 const Post = ({ post, postedBy }) => {
   const [user, setUser] = useState(null)
   const showToast = useShowToast()
+  const currentUser = useRecoilValue(userAtom)
 
   const navigate = useNavigate()
 
@@ -29,6 +33,25 @@ const Post = ({ post, postedBy }) => {
 
     getUser()
   }, [postedBy, showToast])
+
+  const handleDeletePost = async (e) => {
+    try {
+      e.preventDefault()
+      if (!window.confirm('Are you sure you want to delete this post?')) return
+
+      const res = await fetch(`/api/posts/${post._id}`, {
+        method: 'DELETE'
+      })
+      const data = await res.json()
+      if (data.error) {
+        showToast('Error', data.error, 'error')
+        return
+      }
+      showToast('Success', 'Post deleted', 'success')
+    } catch (error) {
+      showToast('Error', error.message, 'error')
+    }
+  }
 
   if (!user) return null
 
@@ -110,6 +133,10 @@ const Post = ({ post, postedBy }) => {
               >
                 {formatDistanceToNow(new Date(post.createdAt))} ago
               </Text>
+
+              {currentUser?._id === user._id && (
+                <DeleteIcon size={20} onClick={handleDeletePost} />
+              )}
             </Flex>
           </Flex>
 
