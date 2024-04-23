@@ -6,7 +6,6 @@ import Actions from './Actions'
 import useShowToast from '~/hooks/useShowToast'
 
 const Post = ({ post, postedBy }) => {
-  const [liked, setLiked] = useState(false)
   const [user, setUser] = useState(null)
   const showToast = useShowToast()
 
@@ -86,6 +85,7 @@ const Post = ({ post, postedBy }) => {
             )}
           </Box>
         </Flex>
+
         <Flex flex={1} flexDirection={'column'} gap={2}>
           <Flex justifyContent={'space-between'} w={'full'}>
             <Flex w={'full'} alignItems={'center'}>
@@ -126,17 +126,7 @@ const Post = ({ post, postedBy }) => {
           )}
 
           <Flex gap={3} my={1}>
-            <Actions liked={liked} setLiked={setLiked} />
-          </Flex>
-
-          <Flex gap={2} alignItems={'center'}>
-            <Text color={'gray.light'} fontSize="sm">
-              {post.replies.length} replies
-            </Text>
-            <Box w={0.5} h={0.5} borderRadius={'full'} bg={'gray.light'}></Box>
-            <Text color={'gray.light'} fontSize="sm">
-              {post.likes.length} likes
-            </Text>
+            <Actions post={post} />
           </Flex>
         </Flex>
       </Flex>
