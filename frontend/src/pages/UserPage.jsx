@@ -1,6 +1,8 @@
 import { Flex, Spinner } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { useRecoilState } from 'recoil'
+import postsAtom from '~/atoms/postAtom'
 import Post from '~/components/Post'
 import UserHeader from '~/components/UserHeader'
 import useGetUserProfile from '~/hooks/useGetUserProfile'
@@ -10,7 +12,7 @@ function UserPage() {
   const { user, loading } = useGetUserProfile()
   const { username } = useParams()
   const showToast = useShowToast()
-  const [posts, setPosts] = useState([])
+  const [posts, setPosts] = useRecoilState(postsAtom)
   const [fetchingPosts, setFetchingPosts] = useState(true)
 
   useEffect(() => {
@@ -29,7 +31,9 @@ function UserPage() {
     }
 
     getPosts()
-  }, [username, showToast])
+  }, [username, showToast, setPosts])
+
+  // console.log('Posts is here and it is recoil state', posts)
 
   if (!user && loading) {
     return (
@@ -38,6 +42,7 @@ function UserPage() {
       </Flex>
     )
   }
+
   if (!user && !loading) return <h1>User not found</h1>
 
   return (
