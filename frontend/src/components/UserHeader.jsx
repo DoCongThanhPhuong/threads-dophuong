@@ -11,6 +11,7 @@ import {
   Portal,
   Text,
   VStack,
+  useColorModeValue,
   useToast
 } from '@chakra-ui/react'
 import { useState } from 'react'
@@ -22,6 +23,9 @@ import userAtom from '~/atoms/userAtom'
 import useShowToast from '~/hooks/useShowToast'
 
 function UserHeader({ user }) {
+  const darkModeColor = useColorModeValue('gray.300', 'gray.dark')
+  const lightModeColor = useColorModeValue('gray.600', 'gray.light')
+
   const toast = useToast()
   const currentUser = useRecoilValue(userAtom) // logged in user
   const [following, setFollowing] = useState(
@@ -90,8 +94,8 @@ function UserHeader({ user }) {
             <Text fontSize={'sm'}>{user.username}</Text>
             <Text
               fontSize={'xs'}
-              bg={'gray.dark'}
-              color={'gray.light'}
+              bg={darkModeColor}
+              color={lightModeColor}
               p={1}
               borderRadius={'full'}
             >
@@ -162,10 +166,11 @@ function UserHeader({ user }) {
         </Flex>
       </Flex>
 
-      <Flex w={'full'}>
+      <Flex w={'full'} alignItems={'center'}>
         <Flex
           flex={1}
-          borderBottom={'1.5px solid white'}
+          borderBottom={'1.5px solid'}
+          borderColor={lightModeColor}
           justifyContent={'center'}
           pb={3}
           cursor={'pointer'}
@@ -174,7 +179,8 @@ function UserHeader({ user }) {
         </Flex>
         <Flex
           flex={1}
-          borderBottom={'1px solid gray'}
+          borderBottom={'1px solid'}
+          borderColor={darkModeColor}
           justifyContent={'center'}
           color={'gray.light'}
           pb={3}
