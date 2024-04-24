@@ -23,8 +23,8 @@ import userAtom from '~/atoms/userAtom'
 import useShowToast from '~/hooks/useShowToast'
 
 function UserHeader({ user }) {
-  const darkModeColor = useColorModeValue('gray.300', 'gray.dark')
-  const lightModeColor = useColorModeValue('gray.600', 'gray.light')
+  const darkColor = useColorModeValue('gray.300', 'gray.dark')
+  const lightColor = useColorModeValue('gray.600', 'gray.light')
 
   const toast = useToast()
   const currentUser = useRecoilValue(userAtom) // logged in user
@@ -94,8 +94,8 @@ function UserHeader({ user }) {
             <Text fontSize={'sm'}>{user.username}</Text>
             <Text
               fontSize={'xs'}
-              bg={darkModeColor}
-              color={lightModeColor}
+              bg={darkColor}
+              color={lightColor}
               p={1}
               borderRadius={'full'}
             >
@@ -170,7 +170,7 @@ function UserHeader({ user }) {
         <Flex
           flex={1}
           borderBottom={'1.5px solid'}
-          borderColor={lightModeColor}
+          borderColor={lightColor}
           justifyContent={'center'}
           pb={3}
           cursor={'pointer'}
@@ -180,7 +180,7 @@ function UserHeader({ user }) {
         <Flex
           flex={1}
           borderBottom={'1px solid'}
-          borderColor={darkModeColor}
+          borderColor={darkColor}
           justifyContent={'center'}
           color={'gray.light'}
           pb={3}
