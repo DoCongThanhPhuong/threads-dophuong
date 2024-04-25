@@ -115,14 +115,18 @@ const MessageContainer = () => {
   return (
     <Flex
       flex="70"
-      bg={useColorModeValue('gray.200', 'gray.dark')}
+      bg={useColorModeValue('gray.300', 'gray.dark')}
       borderRadius={'md'}
       p={2}
       flexDirection={'column'}
     >
       {/* Message header */}
       <Flex w={'full'} h={12} alignItems={'center'} gap={2}>
-        <Avatar src={selectedConversation.userProfilePic} size={'sm'} />
+        <Avatar
+          src={selectedConversation.userProfilePic}
+          size={'sm'}
+          border={'1px solid white'}
+        />
         <Text display={'flex'} alignItems={'center'}>
           {selectedConversation.username}{' '}
           <Image src="/verified.png" w={4} h={4} ml={1} />

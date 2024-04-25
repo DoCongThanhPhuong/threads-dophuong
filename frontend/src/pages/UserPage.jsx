@@ -1,4 +1,4 @@
-import { Flex, Spinner } from '@chakra-ui/react'
+import { Flex, Spinner, Text } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
@@ -43,21 +43,22 @@ function UserPage() {
     )
   }
 
-  if (!user && !loading) return <h1>User not found</h1>
+  if (!user && !loading) return <Text>User not found</Text>
 
   return (
     <>
       <UserHeader user={user} />
-      {!fetchingPosts && posts.length === 0 && <h1>User has not posts.</h1>}
+      {!fetchingPosts && posts.length === 0 && <Text>User has not posts.</Text>}
       {fetchingPosts && (
         <Flex justifyContent={'center'} my={12}>
           <Spinner size={'xl'} />
         </Flex>
       )}
 
-      {posts.map((post) => (
-        <Post key={post._id} post={post} postedBy={post.postedBy} />
-      ))}
+      {Array.isArray(posts) &&
+        posts.map((post) => (
+          <Post key={post._id} post={post} postedBy={post.postedBy} />
+        ))}
     </>
   )
 }

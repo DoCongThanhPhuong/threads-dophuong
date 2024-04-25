@@ -50,6 +50,7 @@ const Conversation = ({ conversation, isOnline }) => {
             : 'gray.dark'
           : ''
       }
+      color={selectedConversation?._id === conversation._id ? 'gray.200' : ''}
       borderRadius={'md'}
     >
       <WrapItem>
