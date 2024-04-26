@@ -43,6 +43,7 @@ function UserPost({ postImg, postTitle, likes, replies }) {
             />
           </Box>
         </Flex>
+
         <Flex flex={1} flexDirection={'column'} gap={2}>
           <Flex justifyContent={'space-between'}>
             <Flex w={'full'} alignItems={'center'}>

@@ -16,9 +16,11 @@ const useFollowUnfollow = (user) => {
       showToast('Error', 'Please login to follow', 'error')
       return
     }
+
     if (updating) return
 
     setUpdating(true)
+
     try {
       const res = await fetch(`/api/users/follow/${user._id}`, {
         method: 'POST',
@@ -39,6 +41,7 @@ const useFollowUnfollow = (user) => {
         showToast('Success', `Followed ${user.name}`, 'success')
         user.followers.push(currentUser?._id) // simulate adding to followers
       }
+
       setFollowing(!following)
     } catch (error) {
       showToast('Error', error, 'error')

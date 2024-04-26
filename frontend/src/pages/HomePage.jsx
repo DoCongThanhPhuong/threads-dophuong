@@ -10,6 +10,7 @@ const HomePage = () => {
   const [posts, setPosts] = useRecoilState(postsAtom)
   const [loading, setLoading] = useState(true)
   const showToast = useShowToast()
+
   useEffect(() => {
     const getFeedPosts = async () => {
       setLoading(true)
@@ -28,6 +29,7 @@ const HomePage = () => {
         setLoading(false)
       }
     }
+
     getFeedPosts()
   }, [showToast, setPosts])
 
@@ -49,6 +51,7 @@ const HomePage = () => {
             <Post key={post._id} post={post} postedBy={post.postedBy} />
           ))}
       </Box>
+
       <Box
         flex={30}
         display={{

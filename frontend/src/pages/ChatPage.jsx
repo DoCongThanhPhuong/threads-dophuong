@@ -77,15 +77,18 @@ const ChatPage = () => {
   const handleConversationSearch = async (e) => {
     e.preventDefault()
     setSearchingUser(true)
+
     try {
       const res = await fetch(`/api/users/profile/${searchText}`)
       const searchedUser = await res.json()
+
       if (searchedUser.error) {
         showToast('Error', searchedUser.error, 'error')
         return
       }
 
       const messagingYourself = searchedUser._id === currentUser._id
+
       if (messagingYourself) {
         showToast('Error', 'You cannot message yourself', 'error')
         return
@@ -120,6 +123,7 @@ const ChatPage = () => {
           }
         ]
       }
+
       setConversations((prevConvs) => [...prevConvs, mockConversation])
     } catch (error) {
       showToast('Error', error.message, 'error')
