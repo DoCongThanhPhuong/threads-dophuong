@@ -15,10 +15,10 @@ export const SettingsPage = () => {
         headers: { 'Content-Type': 'application/json' }
       })
       const data = await res.json()
-
       if (data.error) {
         return showToast('Error', data.error, 'error')
       }
+
       if (data.success) {
         await logout()
         showToast('Success', 'Your account has been frozen', 'success')

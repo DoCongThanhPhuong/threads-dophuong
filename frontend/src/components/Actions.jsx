@@ -84,8 +84,11 @@ const Actions = ({ post }) => {
         'You must be logged in to reply to a post',
         'error'
       )
+
     if (isReplying) return
+
     setIsReplying(true)
+
     try {
       const res = await fetch('/api/posts/reply/' + post._id, {
         method: 'PUT',

@@ -68,16 +68,17 @@ const CreatePost = () => {
           img: imgUrl
         })
       })
-
       const data = await res.json()
       if (data.error) {
         showToast('Error', data.error, 'error')
         return
       }
       showToast('Success', 'Post created successfully', 'success')
+
       if (username === user.username) {
         setPosts([data, ...posts])
       }
+
       onClose()
       setPostText('')
       setImgUrl('')

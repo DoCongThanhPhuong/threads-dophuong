@@ -24,7 +24,6 @@ import useFollowUnfollow from '~/hooks/useFollowUnfollow'
 function UserHeader({ user }) {
   const darkColor = useColorModeValue('gray.300', 'gray.dark')
   const lightColor = useColorModeValue('gray.600', 'gray.light')
-
   const toast = useToast()
   const currentUser = useRecoilValue(userAtom) // logged in user
   const { handleFollowUnfollow, following, updating } = useFollowUnfollow(user)
@@ -93,11 +92,13 @@ function UserHeader({ user }) {
           <Button size={'sm'}>Update Profile</Button>
         </Link>
       )}
+
       {currentUser?._id !== user._id && (
         <Button size={'sm'} onClick={handleFollowUnfollow} isLoading={updating}>
           {following ? 'Unfollow' : 'Follow'}
         </Button>
       )}
+
       <Flex w={'full'} justifyContent={'space-between'}>
         <Flex gap={2} alignItems={'center'}>
           <Text color={'gray.light'}>{user.followers.length} followers</Text>

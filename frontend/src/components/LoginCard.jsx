@@ -35,6 +35,7 @@ function LoginCard() {
 
   const handleLogin = async () => {
     setLoading(true)
+
     try {
       const res = await fetch('/api/users/login', {
         method: 'POST',
@@ -44,7 +45,6 @@ function LoginCard() {
         body: JSON.stringify(inputs)
       })
       const data = await res.json()
-
       if (data.error) {
         showToast('Error', data.error, 'error')
         return

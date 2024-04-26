@@ -76,6 +76,7 @@ const MessageInput = ({ setMessages }) => {
         })
         return updatedConversations
       })
+
       setMessageText('')
       setImgUrl('')
     } catch (error) {
