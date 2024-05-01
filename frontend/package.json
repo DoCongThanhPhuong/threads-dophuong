@@ -16,6 +16,7 @@
     "@emotion/styled": "^11.11.5",
     "backend": "file:..",
     "date-fns": "^2.30.0",
+    "emoji-picker-react": "^4.9.2",
     "framer-motion": "^11.0.28",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
