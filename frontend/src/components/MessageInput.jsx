@@ -1,8 +1,10 @@
 import {
+  Box,
   Flex,
   Image,
   Input,
   InputGroup,
+  InputLeftElement,
   InputRightElement,
   Modal,
   ModalBody,
@@ -13,9 +15,11 @@ import {
   Spinner,
   useDisclosure
 } from '@chakra-ui/react'
+import EmojiPicker from 'emoji-picker-react'
 import { useRef, useState } from 'react'
 import { BsFillImageFill } from 'react-icons/bs'
 import { IoSendSharp } from 'react-icons/io5'
+import { MdEmojiEmotions, MdKeyboardVoice } from 'react-icons/md'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import {
   conversationsAtom,
@@ -33,6 +37,7 @@ const MessageInput = ({ setMessages }) => {
   const { onClose } = useDisclosure()
   const { handleImageChange, imgUrl, setImgUrl } = usePreviewImg()
   const [isSending, setIsSending] = useState(false)
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 
   const handleSendMessage = async (e) => {
     e.preventDefault()
@@ -86,10 +91,22 @@ const MessageInput = ({ setMessages }) => {
     }
   }
 
+  const handleEmojiModal = () => setShowEmojiPicker(!showEmojiPicker)
+
+  const handleEmojiClick = (emoji) => {
+    setMessageText((prevMessage) => (prevMessage += emoji.emoji))
+  }
+
   return (
-    <Flex gap={2} alignItems={'center'}>
-      <form onSubmit={handleSendMessage} style={{ flex: 95 }}>
+    <Flex gap={2} alignItems={'center'} position={'relative'}>
+      <Flex flex={5}>
+        <MdKeyboardVoice size={20} />
+      </Flex>
+      <form onSubmit={handleSendMessage} style={{ flex: 85 }}>
         <InputGroup>
+          <InputLeftElement>
+            <MdEmojiEmotions onClick={handleEmojiModal} cursor={'pointer'} />
+          </InputLeftElement>
           <Input
             w={'full'}
             placeholder="Type a message"
@@ -110,6 +127,11 @@ const MessageInput = ({ setMessages }) => {
           onChange={handleImageChange}
         />
       </Flex>
+      {showEmojiPicker && (
+        <Box position={'absolute'} bottom={10} left={10} zIndex={40}>
+          <EmojiPicker onEmojiClick={handleEmojiClick} />
+        </Box>
+      )}
       <Modal
         isOpen={imgUrl}
         onClose={() => {
