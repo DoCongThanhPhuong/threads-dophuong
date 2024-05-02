@@ -15,7 +15,7 @@ import {
   Spinner,
   useDisclosure
 } from '@chakra-ui/react'
-import EmojiPicker from 'emoji-picker-react'
+import EmojiPicker, { EmojiStyle } from 'emoji-picker-react'
 import { useRef, useState } from 'react'
 import { BsFillImageFill } from 'react-icons/bs'
 import { IoSendSharp } from 'react-icons/io5'
@@ -27,6 +27,7 @@ import {
 } from '~/atoms/messagesAtom'
 import usePreviewImg from '~/hooks/usePreviewImg'
 import useShowToast from '~/hooks/useShowToast'
+import CaptureAudio from './CaptureAudio'
 
 const MessageInput = ({ setMessages }) => {
   const [messageText, setMessageText] = useState('')
@@ -38,6 +39,7 @@ const MessageInput = ({ setMessages }) => {
   const { handleImageChange, imgUrl, setImgUrl } = usePreviewImg()
   const [isSending, setIsSending] = useState(false)
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+  const [showAudioRecorder, setShowAudioRecorder] = useState(false)
 
   const handleSendMessage = async (e) => {
     e.preventDefault()
@@ -100,9 +102,10 @@ const MessageInput = ({ setMessages }) => {
   return (
     <Flex gap={2} alignItems={'center'} position={'relative'}>
       <Flex flex={5}>
-        <MdKeyboardVoice size={20} />
+        <MdKeyboardVoice size={20} onClick={() => setShowAudioRecorder(true)} />
       </Flex>
-      <form onSubmit={handleSendMessage} style={{ flex: 85 }}>
+      {showAudioRecorder && <CaptureAudio hide={setShowAudioRecorder} />}
+      <form onSubmit={handleSendMessage} style={{ flex: 90 }}>
         <InputGroup>
           <InputLeftElement>
             <MdEmojiEmotions onClick={handleEmojiModal} cursor={'pointer'} />
@@ -129,7 +132,10 @@ const MessageInput = ({ setMessages }) => {
       </Flex>
       {showEmojiPicker && (
         <Box position={'absolute'} bottom={10} left={10} zIndex={40}>
-          <EmojiPicker onEmojiClick={handleEmojiClick} />
+          <EmojiPicker
+            emojiStyle={EmojiStyle.NATIVE}
+            onEmojiClick={handleEmojiClick}
+          />
         </Box>
       )}
       <Modal
