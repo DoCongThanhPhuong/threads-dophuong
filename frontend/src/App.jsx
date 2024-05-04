@@ -10,7 +10,8 @@ import userAtom from './atoms/userAtom'
 import UpdateProfilePage from './pages/UpdateProfilePage'
 import CreatePost from './components/CreatePost'
 import ChatPage from './pages/ChatPage'
-import { SettingsPage } from './pages/SettingsPage'
+import SettingsPage from './pages/SettingsPage'
+import ResetPasswordPage from './pages/ResetPasswordPage'
 
 function App() {
   const user = useRecoilValue(userAtom)
@@ -30,6 +31,10 @@ function App() {
           <Route
             path="/auth"
             element={!user ? <AuthPage /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/reset-password/:token"
+            element={!user ? <ResetPasswordPage /> : <Navigate to="/" />}
           />
           <Route
             path="/update"
