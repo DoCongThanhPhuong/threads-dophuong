@@ -101,12 +101,8 @@ const MessageInput = ({ setMessages }) => {
     <Flex gap={2} alignItems={'center'} position={'relative'}>
       <form onSubmit={handleSendMessage} style={{ flex: 95 }}>
         <InputGroup>
-          <InputLeftElement>
-            <MdEmojiEmotions
-              size={20}
-              onClick={handleEmojiModal}
-              cursor={'pointer'}
-            />
+          <InputLeftElement onClick={handleEmojiModal} cursor={'pointer'}>
+            <MdEmojiEmotions size={20} />
           </InputLeftElement>
           <Input
             w={'full'}

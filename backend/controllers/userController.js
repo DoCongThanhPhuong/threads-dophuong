@@ -4,6 +4,8 @@ import bcrypt from 'bcryptjs'
 import generateTokenAndSetCookie from '../utils/helpers/generateTokenAndSetCookie.js'
 import { v2 as cloudinary } from 'cloudinary'
 import mongoose from 'mongoose'
+import jwt from 'jsonwebtoken'
+import nodemailer from 'nodemailer'
 
 const getUserProfile = async (req, res) => {
   // We will fetch user profile either with username or userId
@@ -103,6 +105,79 @@ const loginUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message })
     console.log('Error in loginUser: ', error.message)
+  }
+}
+
+const forgotPassword = async (req, res) => {
+  try {
+    const email = req.body.email
+    const user = await User.findOne({ email })
+    if (!user) return res.status(400).json({ error: 'User not found' })
+
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: '10m'
+    })
+
+    const link = `https://threads-dophuong.onrender.com/reset-password/${token
+      .replace(/\./g, '^')
+      .replace(/_/g, ';')}`
+
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD
+      }
+    })
+
+    var mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Password Reset',
+      html: `<p>Click <a href="${link}">here</a> to reset your password</p>`
+    }
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error)
+      } else {
+        console.log('Email sent: ' + info.response)
+      }
+    })
+
+    res.status(200).json({ message: 'Check your email to reset password' })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+    console.log('Error in forgotPassword: ', err.message)
+  }
+}
+
+const resetPassword = async (req, res) => {
+  try {
+    const token = req.params.token.replace(/\^/g, '.').replace(/\;/g, '_')
+    const password = req.body.newPassword
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    const user = await User.findById(decoded.userId)
+    if (!user) return res.status(400).json({ error: 'User not found' })
+
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(password, salt)
+    user.password = hashedPassword
+    await user.save()
+
+    generateTokenAndSetCookie(user._id, res)
+    res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      username: user.username,
+      bio: user.bio,
+      profilePic: user.profilePic
+    })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+    console.log('Error in resetPassword: ', err.message)
   }
 }
 
@@ -258,6 +333,8 @@ const freezeAccount = async (req, res) => {
 export {
   signupUser,
   loginUser,
+  forgotPassword,
+  resetPassword,
   logoutUser,
   followUnFollowUser,
   updateUser,
