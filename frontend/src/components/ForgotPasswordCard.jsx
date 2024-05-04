@@ -12,6 +12,7 @@ import {
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import useShowToast from '~/hooks/useShowToast'
+import { validateEmail } from '~/utils/validators'
 
 function ForgottenPasswordPage() {
   const [email, setEmail] = useState('')
@@ -19,6 +20,10 @@ function ForgottenPasswordPage() {
   const [loading, setLoading] = useState(false)
 
   const handleForgotPassword = async () => {
+    if (!email || !validateEmail(email)) {
+      showToast('Error', 'Invalid email address', 'error')
+      return
+    }
     setLoading(true)
 
     try {

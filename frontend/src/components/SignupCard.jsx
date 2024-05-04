@@ -20,6 +20,7 @@ import { useSetRecoilState } from 'recoil'
 import authScreenAtom from '~/atoms/authAtom'
 import useShowToast from '~/hooks/useShowToast'
 import userAtom from '~/atoms/userAtom'
+import { validateEmail } from '~/utils/validators'
 
 function SignupCard() {
   const [showPassword, setShowPassword] = useState(false)
@@ -30,11 +31,22 @@ function SignupCard() {
     email: '',
     password: ''
   })
+  const [loading, setLoading] = useState(false)
 
   const showToast = useShowToast()
   const setUser = useSetRecoilState(userAtom)
 
   const handleSignup = async () => {
+    if (!inputs.name || !inputs.username || !inputs.email || !inputs.password) {
+      showToast('Error', 'Please fill in complete information', 'error')
+      return
+    }
+    if (!validateEmail(inputs.email)) {
+      showToast('Error', 'Invalid email address', 'error')
+      return
+    }
+    setLoading(true)
+
     try {
       const res = await fetch('/api/users/signup', {
         method: 'POST',
@@ -53,6 +65,8 @@ function SignupCard() {
       setUser(data)
     } catch (error) {
       showToast('Error', error, 'error')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -139,6 +153,7 @@ function SignupCard() {
                   bg: useColorModeValue('gray.700', 'gray.800')
                 }}
                 onClick={handleSignup}
+                isLoading={loading}
               >
                 Sign up
               </Button>

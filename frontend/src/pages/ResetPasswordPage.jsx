@@ -27,6 +27,10 @@ function ResetPasswordPage() {
   const setUser = useSetRecoilState(userAtom)
 
   const handleResetPassword = async () => {
+    if (!newPassword) {
+      showToast('Error', 'Please enter a new password', 'error')
+      return
+    }
     setLoading(true)
 
     try {

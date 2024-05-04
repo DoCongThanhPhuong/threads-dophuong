@@ -15,6 +15,7 @@ import { useRecoilState } from 'recoil'
 import userAtom from '~/atoms/userAtom'
 import usePreviewImg from '~/hooks/usePreviewImg'
 import useShowToast from '~/hooks/useShowToast'
+import { validateEmail } from '~/utils/validators'
 
 function UpdateProfilePage() {
   const [user, setUser] = useRecoilState(userAtom)
@@ -33,6 +34,14 @@ function UpdateProfilePage() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (updating) return
+    if (!inputs.name || !inputs.username || !inputs.email || !inputs.password) {
+      showToast('Error', 'Please fill in complete information', 'error')
+      return
+    }
+    if (!validateEmail(inputs.email)) {
+      showToast('Error', 'Invalid email address', 'error')
+      return
+    }
     setUpdating(true)
 
     try {

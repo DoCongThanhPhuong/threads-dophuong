@@ -34,6 +34,10 @@ function LoginCard() {
   const showToast = useShowToast()
 
   const handleLogin = async () => {
+    if (!inputs.username || !inputs.password) {
+      showToast('Error', 'Please fill in complete information', 'error')
+      return
+    }
     setLoading(true)
 
     try {
@@ -146,7 +150,7 @@ function LoginCard() {
                   color={'blue.400'}
                   onClick={() => setAuthScreen('forgotPassword')}
                 >
-                  Forgotten Password?
+                  Forgotten password?
                 </Link>
               </Text>
             </Stack>
