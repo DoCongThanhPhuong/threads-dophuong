@@ -30,8 +30,7 @@ app.use('/api/users', userRoutes)
 app.use('/api/posts', postRoutes)
 app.use('/api/messages', messageRoutes)
 
-// http://localhost:5000 => backend,frontend
-
+// http://localhost:5000 => backend, frontend
 if (process.env.NODE_ENV === 'production') {
   job.start()
 

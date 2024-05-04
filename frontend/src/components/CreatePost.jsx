@@ -55,7 +55,12 @@ const CreatePost = () => {
   }
 
   const handleCreatePost = async () => {
+    if (!postText) {
+      showToast('Error', 'Please enter a title', 'error')
+      return
+    }
     setLoading(true)
+
     try {
       const res = await fetch('/api/posts/create', {
         method: 'POST',
@@ -111,7 +116,7 @@ const CreatePost = () => {
           <ModalBody pb={6}>
             <FormControl>
               <Textarea
-                placeholder="Post content goes here.."
+                placeholder="Post content goes here..."
                 onChange={handleTextChange}
                 value={postText}
               />

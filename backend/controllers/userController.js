@@ -10,7 +10,6 @@ import nodemailer from 'nodemailer'
 const getUserProfile = async (req, res) => {
   // We will fetch user profile either with username or userId
   // query is either username or userId
-
   const { query } = req.params
 
   try {
@@ -32,7 +31,6 @@ const getUserProfile = async (req, res) => {
     res.status(200).json(user)
   } catch (err) {
     res.status(500).json({ error: err.message })
-    console.log('Error in getUserProfile: ', err.message)
   }
 }
 
@@ -71,7 +69,6 @@ const signupUser = async (req, res) => {
     }
   } catch (err) {
     res.status(500).json({ error: err.message })
-    console.log('Error in signupUser: ', err.message)
   }
 }
 
@@ -104,7 +101,6 @@ const loginUser = async (req, res) => {
     })
   } catch (error) {
     res.status(500).json({ error: error.message })
-    console.log('Error in loginUser: ', error.message)
   }
 }
 
@@ -122,7 +118,7 @@ const forgotPassword = async (req, res) => {
       .replace(/\./g, '^')
       .replace(/_/g, ';')}`
 
-    var transporter = nodemailer.createTransport({
+    const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: process.env.EMAIL_USER,
@@ -130,7 +126,7 @@ const forgotPassword = async (req, res) => {
       }
     })
 
-    var mailOptions = {
+    const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
       subject: 'Password Reset',
@@ -139,16 +135,14 @@ const forgotPassword = async (req, res) => {
 
     transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
-        console.log(error)
-      } else {
-        console.log('Email sent: ' + info.response)
+        // console.log(error)
+        return res.status(400).json({ error: 'Email sent unsuccessfully' })
       }
     })
 
     res.status(200).json({ message: 'Check your email to reset password' })
   } catch (err) {
     res.status(500).json({ error: err.message })
-    console.log('Error in forgotPassword: ', err.message)
   }
 }
 
@@ -177,7 +171,6 @@ const resetPassword = async (req, res) => {
     })
   } catch (err) {
     res.status(500).json({ error: err.message })
-    console.log('Error in resetPassword: ', err.message)
   }
 }
 
@@ -187,7 +180,6 @@ const logoutUser = (req, res) => {
     res.status(200).json({ message: 'User logged out successfully' })
   } catch (err) {
     res.status(500).json({ error: err.message })
-    console.log('Error in signupUser: ', err.message)
   }
 }
 
@@ -220,7 +212,6 @@ const followUnFollowUser = async (req, res) => {
     }
   } catch (err) {
     res.status(500).json({ error: err.message })
-    console.log('Error in followUnFollowUser: ', err.message)
   }
 }
 
@@ -280,7 +271,6 @@ const updateUser = async (req, res) => {
     res.status(200).json(user)
   } catch (err) {
     res.status(500).json({ error: err.message })
-    console.log('Error in updateUser: ', err.message)
   }
 }
 
