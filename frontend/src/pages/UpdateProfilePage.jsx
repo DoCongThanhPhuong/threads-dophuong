@@ -34,7 +34,7 @@ function UpdateProfilePage() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (updating) return
-    if (!inputs.name || !inputs.username || !inputs.email || !inputs.password) {
+    if (!inputs.name || !inputs.username || !inputs.email) {
       showToast('Error', 'Please fill in complete information', 'error')
       return
     }

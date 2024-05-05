@@ -16,7 +16,7 @@ import {
   useDisclosure
 } from '@chakra-ui/react'
 import EmojiPicker, { EmojiStyle } from 'emoji-picker-react'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { BsFillImageFill } from 'react-icons/bs'
 import { IoSendSharp } from 'react-icons/io5'
 import { MdEmojiEmotions } from 'react-icons/md'
@@ -91,17 +91,42 @@ const MessageInput = ({ setMessages }) => {
     }
   }
 
-  const handleEmojiModal = () => setShowEmojiPicker(!showEmojiPicker)
+  const handleEmojiModal = (e) => {
+    e.stopPropagation()
+    setShowEmojiPicker(!showEmojiPicker)
+  }
 
   const handleEmojiClick = (emoji) => {
     setMessageText((prevMessage) => (prevMessage += emoji.emoji))
   }
 
+  const handleClickOutside = (event) => {
+    const clickedElement = event.target
+
+    if (
+      ![...clickedElement.classList].some((className) =>
+        className.includes('epr')
+      )
+    ) {
+      setShowEmojiPicker(false)
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside)
+
+    return () => document.removeEventListener('click', handleClickOutside)
+  }, [])
+
   return (
     <Flex gap={2} alignItems={'center'} position={'relative'}>
       <form onSubmit={handleSendMessage} style={{ flex: 95 }}>
         <InputGroup>
-          <InputLeftElement onClick={handleEmojiModal} cursor={'pointer'}>
+          <InputLeftElement
+            id="emojis-btn"
+            onClick={handleEmojiModal}
+            cursor={'pointer'}
+          >
             <MdEmojiEmotions size={20} />
           </InputLeftElement>
           <Input
