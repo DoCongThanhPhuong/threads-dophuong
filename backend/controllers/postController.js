@@ -7,10 +7,8 @@ const createPost = async (req, res) => {
     const { postedBy, text } = req.body
     let { img } = req.body
 
-    if (!postedBy || !text) {
-      return res
-        .status(400)
-        .json({ error: 'Posted By and text fields are required' })
+    if (!postedBy) {
+      return res.status(401).json({ error: 'Unauthorized to create post' })
     }
 
     const user = await User.findById(postedBy)

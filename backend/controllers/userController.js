@@ -1,14 +1,15 @@
-import User from '../models/userModel.js'
-import Post from '../models/postModel.js'
 import bcrypt from 'bcryptjs'
-import generateTokenAndSetCookie from '../helpers/generateTokenAndSetCookie.js'
 import { v2 as cloudinary } from 'cloudinary'
-import mongoose from 'mongoose'
 import jwt from 'jsonwebtoken'
-import nodemailer from 'nodemailer'
+import mongoose from 'mongoose'
+import generateTokenAndSetCookie from '../helpers/generateTokenAndSetCookie.js'
+import Post from '../models/postModel.js'
+import User from '../models/userModel.js'
+import { generatePasswordResetEmail } from '../utils/emailTemplates.js'
+import { sendEmail } from '../utils/sendEmail.js'
 
 const getUserProfile = async (req, res) => {
-  // We will fetch user profile either with username or userId
+  // fetch user profile either with username or userId
   // query is either username or userId
   const { query } = req.params
 
@@ -106,41 +107,23 @@ const loginUser = async (req, res) => {
 
 const forgotPassword = async (req, res) => {
   try {
-    const email = req.body.email
+    const { email } = req.body
     const user = await User.findOne({ email })
     if (!user) return res.status(400).json({ error: 'User not found' })
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: '10m'
+      expiresIn: '5m'
     })
 
     const link = `https://threads-dophuong.onrender.com/reset-password/${token
       .replace(/\./g, '^')
       .replace(/_/g, ';')}`
 
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD
-      }
-    })
+    const emailContent = generatePasswordResetEmail(link)
 
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: 'Password Reset',
-      html: `<p>Click <a href="${link}">here</a> to reset your password</p>`
-    }
+    await sendEmail(email, 'Password Reset', emailContent)
 
-    transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-        // console.log(error)
-        return res.status(400).json({ error: 'Email sent unsuccessfully' })
-      }
-    })
-
-    res.status(200).json({ message: 'Check your email to reset password' })
+    res.status(200).json({ message: 'Check your email to reset your password' })
   } catch (err) {
     res.status(500).json({ error: err.message })
   }
@@ -321,14 +304,14 @@ const freezeAccount = async (req, res) => {
 }
 
 export {
-  signupUser,
-  loginUser,
-  forgotPassword,
-  resetPassword,
-  logoutUser,
   followUnFollowUser,
-  updateUser,
-  getUserProfile,
+  forgotPassword,
+  freezeAccount,
   getSuggestedUsers,
-  freezeAccount
+  getUserProfile,
+  loginUser,
+  logoutUser,
+  resetPassword,
+  signupUser,
+  updateUser
 }
